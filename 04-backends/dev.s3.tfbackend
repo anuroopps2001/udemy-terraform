@@ -1,0 +1,4 @@
+    bucket = "terraform-remote-backend-387439"
+    key = "04-terraform-backends/dev/state.tfstate"
+    // This region need not be same the as the region, where terraform is creating our resources
+    region = "us-east-1"

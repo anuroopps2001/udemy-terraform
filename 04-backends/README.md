@@ -275,14 +275,4 @@ backend "s3" {
 
 ---
 
-## 15. Next Topics You Should Learn
-
-* Terraform state internals
-* `terraform import`
-* State drift and recovery
-* Workspaces vs backend separation
-* CI/CD Terraform workflows
-
----
-
 **End of document**

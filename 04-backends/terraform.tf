@@ -12,10 +12,10 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "terraform-remote-backend-387439"
-    key = "04-terraform-backends/state.tfstate"
-    // This region need not be same the as the region, where terraform is creating our resources
-    region = "us-east-1"
+    // check out .tfbackend files and use while performing terraform initialization in respective environment
+
+    // terraform init -backend-config="prod.s3.tfbackend"  // To initialize statefile for production environment
   }
 }
+
 
