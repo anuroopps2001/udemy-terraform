@@ -9,7 +9,7 @@ locals {
 resource "aws_vpc" "nginx-web-pvc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
-  // merge is an buitin function takes 2 args and merge them
+  // merge is an builtin function takes 2 args and merge them
   tags = merge(local.common_tags, { Name = "06-resources-vpc" })
 }
 
