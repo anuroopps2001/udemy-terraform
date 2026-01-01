@@ -4,6 +4,13 @@ resource "aws_instance" "nginx-vpc" {
   associate_public_ip_address = true
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_subnet.id
+
+
+  user_data = file("install_jenkins.sh")
+  // key_name argument causes the instance to be replaced (destroyed and recreated) if changed
+  key_name = "my-kp"
+
+
   root_block_device {
     // delete ebs volume on termination of an instance
     delete_on_termination = true
@@ -26,9 +33,17 @@ resource "aws_instance" "nginx-vpc" {
 resource "aws_security_group" "nginx-sg" {
   name        = "06-resources-sg"
   description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.nginx-web-pvc.id
+  vpc_id      = aws_vpc.nginx-web-vpc.id
 
   tags = merge(local.common_tags, { Name = "06-resources-sg" })
+}
+
+resource "aws_vpc_security_group_ingress_rule" "nginx-ipv4-ssh" {
+  security_group_id = aws_security_group.nginx-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  ip_protocol       = "tcp"
+  to_port           = 22
 }
 
 resource "aws_vpc_security_group_ingress_rule" "nginx-ipv4-http" {
@@ -45,4 +60,30 @@ resource "aws_vpc_security_group_ingress_rule" "nginx-ipv4-https" {
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+}
+
+resource "aws_vpc_security_group_ingress_rule" "nginx-ipv4-jenkins-access" {
+  security_group_id = aws_security_group.nginx-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+
+  // from_port refers to the destination port on your EC2 instance
+  from_port         = 8080
+  ip_protocol       = "tcp"
+
+  // Allow traffic TO port 8080 on this instance
+  to_port           = 8080
+}
+
+resource "aws_vpc_security_group_egress_rule" "name" {
+  security_group_id = aws_security_group.nginx-sg.id
+
+  /* -1 → all protocols
+    All ports
+    All destinations */
+  ip_protocol = "-1"
+  cidr_ipv4   = "0.0.0.0/0"
+}
+
+output "jekins_ip_address" {
+  value = aws_instance.nginx-vpc.public_dns
 }
