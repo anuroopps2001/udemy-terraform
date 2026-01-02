@@ -1,46 +1,41 @@
-# Ensure software packages on instance are upto date
-echo "==== Updating system Pakcages ===="
-sudo yum update –y
+#!/bin/bash
+set -e
 
-# Add the Jenkins repo
-echo "==== Adding Jenkins repo ===="
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+export DEBIAN_FRONTEND=noninteractive
 
+echo "==== Updating system packages ===="
+sudo apt-get update -y
+sudo apt-get upgrade -y
 
-echo "==== Import a key file from Jenkins-CI to enable installation from the package ====="
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key; sudo yum upgrade
+echo "==== Installing prerequisites ===="
+sudo apt-get install -y ca-certificates curl gnupg lsb-release apt-transport-https
 
+echo "==== Adding Jenkins GPG key ===="
+sudo curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key \
+  | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 
-echo "Installing Java"
-sudo yum install java-21-amazon-corretto -y
+echo "==== Adding Jenkins repository ===="
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" \
+  | sudo tee /etc/apt/sources.list.d/jenkins.list
 
-echo "Install Maven"
-yum install -y maven 
+sudo apt-get update -y
 
-echo "Install git"
-yum install -y git
+echo "==== Installing Java (required by Jenkins) ===="
+sudo apt-get install -y openjdk-17-jdk
 
-echo "Install Docker engine"
-yum update -y
-yum install docker -y
-#sudo usermod -a -G docker jenkins
-#sudo service docker start
-sudo chkconfig docker on
+echo "==== Installing Jenkins ===="
+sudo apt-get install -y jenkins
 
+echo "==== Installing Docker ===="
+sudo apt-get install -y docker.io
 
+sudo systemctl enable docker
+sudo systemctl start docker
 
-echo "Installing Jenkins"
-sudo yum install jenkins -y
+echo "==== Allow Jenkins to use Docker ===="
+sudo usermod -aG docker jenkins
 
-sudo usermod -a -G docker jenkins
-sudo chkconfig jenkins on
-
-
-echo "Enable the Jenkins service to start at boot"
 sudo systemctl enable jenkins
-
-echo "Start Jenkins as a service"
 sudo systemctl start jenkins
 
-echo "Status of the Jenkins service"
-sudo systemctl status jenkins
+echo "==== Jenkins installation completed ===="

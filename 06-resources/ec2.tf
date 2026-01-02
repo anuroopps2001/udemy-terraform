@@ -1,12 +1,31 @@
-resource "aws_instance" "nginx-vpc" {
-  ami = "ami-005430779df60bbaa" // AMI ID FOR NGINX"ami-005430779df60bbaa"
+locals {
+  docker = file("${path.module}/scripts/docker_install.sh")
+  jenkins = file("${path.module}/scripts/install_jenkins.sh")
+}
+
+resource "aws_instance" "nginx-ec2-instance" {
+  ami = "ami-0fc5d935ebf8bc3bc" // AMI ID FOR NGINX"ami-005430779df60bbaa"
   // UBUNTU AMI ID:= ami-0030e4319cbf4dbf2
   associate_public_ip_address = true
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_subnet.id
 
 
-  user_data = file("install_jenkins.sh")
+
+# This is one way of reading multiple files into an instance using user_data
+  /* user_data = templatefile("${path.module}/user_data.tpl",{
+    docker_instal = file("${path.module}/scripts/docker_install.sh")
+    jenkins_install = file("${path.module}/scripts/install_jenkins.sh")
+  }
+  ) */
+
+
+# This is using locals and using data into ec2 with user_data 
+  user_data = templatefile("${path.module}/user_data.tpl",{
+    docker_install = local.docker
+    jenkins_install = local.jenkins
+  })
+  
   // key_name argument causes the instance to be replaced (destroyed and recreated) if changed
   key_name = "my-kp"
 
@@ -85,5 +104,5 @@ resource "aws_vpc_security_group_egress_rule" "name" {
 }
 
 output "jekins_ip_address" {
-  value = aws_instance.nginx-vpc.public_dns
+  value = aws_instance.nginx-ec2-instance.public_dns
 }
