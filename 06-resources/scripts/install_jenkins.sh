@@ -20,7 +20,7 @@ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkin
 
 sudo apt-get update -y
 
-echo "==== Installing Java (required by Jenkins) ===="
+echo "==== Installing Java 17 ===="
 sudo apt-get install -y openjdk-17-jdk
 
 echo "==== Installing Jenkins ===="
@@ -28,14 +28,13 @@ sudo apt-get install -y jenkins
 
 echo "==== Installing Docker ===="
 sudo apt-get install -y docker.io
-
 sudo systemctl enable docker
 sudo systemctl start docker
 
 echo "==== Allow Jenkins to use Docker ===="
 sudo usermod -aG docker jenkins
-
-sudo systemctl enable jenkins
-sudo systemctl start jenkins
+sudo systemctl restart jenkins
 
 echo "==== Jenkins installation completed ===="
+echo "Initial admin password:"
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword

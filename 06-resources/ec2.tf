@@ -1,13 +1,14 @@
 locals {
   docker = file("${path.module}/scripts/docker_install.sh")
-  jenkins = file("${path.module}/scripts/install_jenkins.sh")
+  // jenkins = file("${path.module}/scripts/install_jenkins.sh")
+  docker_compose = file("${path.module}/scripts/docker_compose_install.sh")
 }
 
 resource "aws_instance" "nginx-ec2-instance" {
   ami = "ami-0fc5d935ebf8bc3bc" // AMI ID FOR NGINX"ami-005430779df60bbaa"
   // UBUNTU AMI ID:= ami-0030e4319cbf4dbf2
   associate_public_ip_address = true
-  instance_type               = "t3.micro"
+  instance_type               = "t2.medium"
   subnet_id                   = aws_subnet.public_subnet.id
 
 
@@ -23,7 +24,8 @@ resource "aws_instance" "nginx-ec2-instance" {
 # This is using locals and using data into ec2 with user_data 
   user_data = templatefile("${path.module}/user_data.tpl",{
     docker_install = local.docker
-    jenkins_install = local.jenkins
+    // jenkins_install = local.jenkins
+    docker_compose_install = local.docker_compose
   })
   
   // key_name argument causes the instance to be replaced (destroyed and recreated) if changed
@@ -33,7 +35,7 @@ resource "aws_instance" "nginx-ec2-instance" {
   root_block_device {
     // delete ebs volume on termination of an instance
     delete_on_termination = true
-    volume_size           = 10
+    volume_size           = 20
     volume_type           = "gp3"
   }
 
@@ -104,5 +106,5 @@ resource "aws_vpc_security_group_egress_rule" "name" {
 }
 
 output "jekins_ip_address" {
-  value = aws_instance.nginx-ec2-instance.public_dns
+  value = aws_instance.nginx-ec2-instance.public_ip
 }

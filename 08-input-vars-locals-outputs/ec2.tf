@@ -26,5 +26,5 @@ resource "aws_instance" "variable_instance" {
   }
   instance_type = var.ec2_instance_type
 
-  tags = merge(var.additional_tags, { ManagedBy = "Terraform" })
+  tags = merge(local.common_tags, var.additional_tags)
 }

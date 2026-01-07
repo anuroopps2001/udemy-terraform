@@ -14,4 +14,4 @@ sudo systemctl enable docker
 sudo systemctl status docker
 
 
-echo "==== Jenkins installation completed ===="
+echo "==== Docker installation completed ===="

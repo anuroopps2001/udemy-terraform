@@ -7,6 +7,6 @@ echo "==== User data started ===="
 
 ${docker_install}
 
-${jenkins_install}
+${docker_compose_install}
 
 echo "===== User data completed ===="
