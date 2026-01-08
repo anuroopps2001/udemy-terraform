@@ -1,0 +1,5 @@
+users:
+- name: Alex
+  group: developers
+- name: Jimmy
+  group: QA Engineers
