@@ -115,7 +115,7 @@ resource "aws_instance" "ec2_instance_from_list" {
 
 
   instance_type = var.ec2_instance_config_list[count.index].instance_type
-  subnet_id     = aws_subnet.subnet[count.index % length(aws_subnet.subnet)].id
+  subnet_id     = aws_subnet.subnet["default"].id
 
   tags = {
     Name    = "${local.project}-${count.index}"
@@ -127,9 +127,9 @@ resource "aws_instance" "ec2_instance_from_map" {
   # each.key   => holds the key of each key-value pair in the map 
   # each.value => holds the value(object) of each key-value pair in the map
   # using each.value, we can extract atributes of that value/object in the map
-  
+
   // In the map below
- /*  ec2_instance_config_map = {  --> map name
+  /*  ec2_instance_config_map = {  --> map name
   "ubuntu_1" = {                  --> key in the map
     instance_type = "t3.micro"    --> attributes of an value
     ami           = "ubuntu"
@@ -144,10 +144,10 @@ resource "aws_instance" "ec2_instance_from_map" {
   for_each      = var.ec2_instance_config_map
   ami           = local.ami_ids[each.value.ami]
   instance_type = each.value.instance_type
-  subnet_id     = aws_subnet.subnet[each.value.subnet_index].id
+  subnet_id     = aws_subnet.subnet_from_map[each.value.subnet_name].id
 
   tags = {
     Name    = "${local.project}-${each.key}"
-    Project = local.project
+    Project = "${local.project}-${each.value.subnet_index}"
   }
 }

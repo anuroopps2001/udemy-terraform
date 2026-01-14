@@ -8,3 +8,14 @@ resource "aws_subnet" "subnet" {
     Name    = "${local.project}-${count.index}"
   }
 }
+
+resource "aws_subnet" "subnet_from_map" {
+  vpc_id     = aws_vpc.main.id
+  for_each   = var.subnet_map
+  cidr_block = each.value.cidr_block
+
+  tags = {
+    Project = local.project
+    Name    = "${local.project}-${each.key}"
+  }
+}

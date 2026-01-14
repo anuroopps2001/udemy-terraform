@@ -1,0 +1,14 @@
+# Brief schema Reference:
+#  users: {
+#    username: string 
+#    roles: (readonly | developer | admin | auditor) [] 
+#}[]
+
+
+iam_users:
+- username: john
+  roles: [readonly, developer]
+- username: jane
+  roles: [admin, auditor]
+- username: lauro
+  roles: [readonly]

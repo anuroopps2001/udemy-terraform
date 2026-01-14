@@ -13,8 +13,9 @@ ec2_instance_config_list = [
 
 ec2_instance_config_map = {
   "ubuntu_1" = {
-    instance_type = "t3.micro"
+    instance_type = "t2.micro"
     ami           = "ubuntu"
+    subnet_name = "subnet_1"
   },
   "nginx_1" = {
     instance_type = "t2.micro"
@@ -22,4 +23,13 @@ ec2_instance_config_map = {
     subnet_index  = 1
   }
 
+}
+
+subnet_map = {
+  default = {
+    cidr_block = "10.0.1.0/24"
+  },
+  subnet_1 = {
+    cidr_block = "10.0.2.0/24"
+  }
 }
