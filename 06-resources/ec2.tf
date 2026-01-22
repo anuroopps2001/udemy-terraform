@@ -43,8 +43,8 @@ resource "aws_instance" "nginx-ec2-instance" {
   })
 
   // key_name argument causes the instance to be replaced (destroyed and recreated) if changed
-  depends_on = [ aws_key_pair.keypair ]
-  key_name = aws_key_pair.keypair.key_name
+  depends_on = [aws_key_pair.keypair]
+  key_name   = aws_key_pair.keypair.key_name
 
 
   root_block_device {

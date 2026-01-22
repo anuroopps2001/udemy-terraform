@@ -5,9 +5,9 @@ provider "aws" {
 }
 
 provider "tls" {
-  
+
 }
 
 provider "local" {
-  
+
 }
