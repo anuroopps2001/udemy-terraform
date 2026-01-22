@@ -36,6 +36,7 @@ pipeline{
                     sh 'terraform -chdir=proj02-iam-users validate'
                 }
             }
+            }
 
             stage ("Terraform plan") {
                 steps {
