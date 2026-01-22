@@ -60,9 +60,9 @@ pipeline{
             }
 
             stage("Terraform Apply (Manual Approval)") {
-                when {
+                /* when {
                    expression {env.BRANCH_NAME == 'origin/main'}
-                }
+                } */
                 steps {
                     input message: "Apply Terraform changes?"
 
