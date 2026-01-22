@@ -5,6 +5,15 @@ pipeline{
         AWS_DEFAULT_REGION = "us-east-1"
     }
     stages{
+        stage("Debug bracnh info..!!") {
+            steps {
+                sh '''
+                  echo "BRANCH_NAME = $BRANCH_NAME"
+                  git branch --show-current || true
+                  git rev-parse --abbrev-ref HEAD || true
+                '''
+            }
+        }
         stage("checkout"){
             steps{
                 echo "========executing checkout========"
@@ -52,7 +61,7 @@ pipeline{
 
             stage("Terraform Apply (Manual Approval)") {
                 when {
-                   branch 'main'
+                   expression {env.BRANCH_NAME == 'origin/main'}
                 }
                 steps {
                     input message: "Apply Terraform changes?"
