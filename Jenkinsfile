@@ -77,7 +77,7 @@ pipeline{
 
             stage ("Terraform destruction (Manual Approval)") {
                 steps {
-                    input mesage: "Destroy infrastructure..?"
+                    input message: "Destroy infrastructure..?"
                     withCredentials([[
                         $class: 'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'aws-terraform'
