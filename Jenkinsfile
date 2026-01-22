@@ -16,7 +16,11 @@ pipeline{
             stage("Terraform init") {
                 steps {
                     echo "========executing Terraform init========"
-                    withCredentials([[ $class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-terraform']]){
+                    withCredentials([[ 
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-terraform'
+                    ]]){
+                        sh 'env | grep AWS'
                         sh 'terraform -chdir=proj02-iam-users init'
                 }
             }

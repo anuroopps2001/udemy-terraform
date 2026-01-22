@@ -1,8 +1,8 @@
-locals {
+/* locals {
   docker = file("${path.module}/scripts/install_jenkins.sh")
   // jenkins = file("${path.module}/scripts/install_jenkins.sh")
   docker_compose = file("${path.module}/scripts/docker_compose_install.sh")
-}
+} */
 
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -23,7 +23,7 @@ resource "aws_instance" "nginx-ec2-instance" {
   ami = data.aws_ami.ubuntu.id // AMI ID FOR NGINX"ami-005430779df60bbaa"
   // UBUNTU AMI ID:= ami-0030e4319cbf4dbf2
   associate_public_ip_address = true
-  instance_type               = "t3.micro"
+  instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public_subnet.id
 
 
@@ -36,11 +36,11 @@ resource "aws_instance" "nginx-ec2-instance" {
 
 
   # This is using locals and using data into ec2 with user_data 
-  user_data = templatefile("${path.module}/user_data.tpl", {
+  /* user_data = templatefile("${path.module}/user_data.tpl", {
     docker_install = local.docker
     // jenkins_install = local.jenkins
     docker_compose_install = local.docker_compose
-  })
+  }) */
 
   // key_name argument causes the instance to be replaced (destroyed and recreated) if changed
   depends_on = [aws_key_pair.keypair]
