@@ -29,6 +29,10 @@ pipeline{
             stage("Terraform validate") {
                 steps {
                     echo "=========executing terraform validate======="
+                    withCredentials([[ 
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-terraform'
+                    ]]){
                     sh 'terraform -chdir=proj02-iam-users validate'
                 }
             }
@@ -36,6 +40,10 @@ pipeline{
             stage ("Terraform plan") {
                 steps {
                     echo "=========executing terraform plan======"
+                    withCredentials([[ 
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-terraform'
+                    ]]){
                     sh 'terraform -chdir=proj02-iam-users plan'
                 }
             }
@@ -46,6 +54,10 @@ pipeline{
                 }
                 steps {
                     echo "========executing terraform manual apply======"
+                    withCredentials([[ 
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-terraform'
+                    ]]){
                     input message: "Apply Terraform changes?"
                     sh 'terraform -chdir=proj02-iam-users apply -auto-approve'
                 }
