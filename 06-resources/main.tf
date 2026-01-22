@@ -21,6 +21,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.nginx-web-vpc.id
   cidr_block = "10.0.1.0/24" // 256 IPs starting from 10.0.1.1 - 10.0.1.254 and network & broadcast IPs
   tags       = merge(local.common_tags, { Name = "06-resources-public-subnet" })
+  availability_zone = "us-east-2a"
 }
 
 // Internet gateway
