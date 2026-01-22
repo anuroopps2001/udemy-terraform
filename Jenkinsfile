@@ -74,5 +74,16 @@ pipeline{
                 }
             }
         }
+
+            stage ("Terraform destruction (Manual Approval)") {
+                steps {
+                    input mesage: "Destroy infrastructure..?"
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws-terraform'
+                    ]])
+                    sh 'terraform -chdir=proj02-iam-users destroy -auto-approve'
+            }
+        }
     }
 }
