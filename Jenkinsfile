@@ -50,21 +50,20 @@ pipeline{
             }
             }
 
-            stage ("Terraform Apply (manual Approval)") {
+            stage("Terraform Apply (Manual Approval)") {
                 when {
-                    branch 'main'
+                   branch 'main'
                 }
                 steps {
-                    echo "========executing terraform manual apply======"
-                    withCredentials([[ 
-                        $class: 'AmazonWebServicesCredentialsBinding', 
-                        credentialsId: 'aws-terraform'
-                    ]]){
                     input message: "Apply Terraform changes?"
+
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws-terraform'
+                    ]]) {
                     sh 'terraform -chdir=proj02-iam-users apply -auto-approve'
                 }
             }
-               
         }
     }
 }
