@@ -48,6 +48,7 @@ pipeline{
                     sh 'terraform -chdir=proj02-iam-users plan'
                 }
             }
+            }
 
             stage ("Terraform Apply (manual Approval)") {
                 when {
@@ -66,3 +67,4 @@ pipeline{
                
         }
     }
+}
