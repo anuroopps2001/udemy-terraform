@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type        = "AWS"
+      type = "AWS"
       identifiers = [
         for username in keys(aws_iam_user.users) : "arn:aws:iam::${data.aws_caller_identity.current_account_details.account_id}:user/${username}"
         if contains(local.users_map[username], each.value)

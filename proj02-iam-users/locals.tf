@@ -1,16 +1,16 @@
 locals {
-  users = yamldecode(file("${path.module}/users-roles.yaml"))
+  users = yamldecode(file("${path.module}/users-roles.yaml")).iam_users
 
   // It will store username as key & username and roles as its attributes at values
   iam_users_map = {
-    for u in local.users.iam_users :
+    for u in local.users :
     u.username => u
   }
 
 
   // username at keys and roles at values
   users_map = {
-    for user_config in local.users.iam_users : user_config.username => user_config.roles
+    for user_config in local.users : user_config.username => user_config.roles
   }
 
 

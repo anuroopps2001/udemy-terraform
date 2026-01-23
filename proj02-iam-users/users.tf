@@ -5,7 +5,7 @@ resource "aws_iam_user" "users" {
 }
 
 resource "aws_iam_user_login_profile" "users_passwords" {
-  for_each        = aws_iam_user.users  // because any resource created with "for_each" becomes a map of resource instances
+  for_each        = aws_iam_user.users // because any resource created with "for_each" becomes a map of resource instances
   user            = each.key
   password_length = 8
 
