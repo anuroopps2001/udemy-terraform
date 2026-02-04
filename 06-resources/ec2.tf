@@ -22,7 +22,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "nginx-ec2-instance" {
   ami = data.aws_ami.ubuntu.id // AMI ID FOR NGINX"ami-005430779df60bbaa"
   // UBUNTU AMI ID:= ami-0030e4319cbf4dbf2
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.public_subnet.id
 

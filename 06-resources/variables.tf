@@ -13,4 +13,4 @@ variable "env" {
 }
 
 # to test how terraform works without assgning value to the variable
-variable "testing_var" {}
+# variable "testing_var" {}
